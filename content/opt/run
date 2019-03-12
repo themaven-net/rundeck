@@ -17,7 +17,7 @@ chown -R mysql:mysql /var/lib/mysql
 chown -R rundeck:rundeck /etc/rundeck
 chown -R rundeck:rundeck /var/rundeck
 chown -R rundeck:adm /var/log/rundeck
-chown -R rundeck:rundeck /var/lib/rundeck
+#chown -R rundeck:rundeck /var/lib/rundeck
 chown -R rundeck:rundeck /opt/rundeck-defaults
 
 # Plugins
@@ -63,12 +63,12 @@ if [ ! -f "${initfile}" ]; then
        sudo -u rundeck ssh-keygen -t rsa -b 4096 -f /var/lib/rundeck/.ssh/id_rsa -N ''
    fi
 
-   if [ "$(ls -A /etc/rundeck)" ]; then
-       echo "=>/etc/rundeck check OK"
-   else
+   if [ "$(ls -A1 /etc/rundeck | wc -l)" -lt "10" ]; then
        echo "=>/etc/rundeck empty...setting up defaults"
        cp -R /opt/rundeck-defaults/* /etc/rundeck
        chown -R rundeck:rundeck /etc/rundeck
+   else
+       echo "=>/etc/rundeck check OK"
    fi
 
    if [ ! -f /etc/rundeck/ssl/truststore ]; then
